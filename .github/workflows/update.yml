@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Find candidates
+      - name: Find new shows
         env:
           TMDB_API_KEY: ${{ secrets.TMDB_API_KEY }}
         run: python3 tools/discover.py
@@ -24,10 +24,10 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
+          date -u +%F > last-run.txt   # keeps the repo active so GitHub never pauses this schedule
           git config user.name hertn
           git config user.email 20706648+hertn@users.noreply.github.com
           git add -A
-          if git diff --cached --quiet; then echo "No changes"; exit 0; fi
-          git commit -m "Add new show candidates"
+          git commit -m "Weekly update" || exit 0
           git push
           gh api -X POST "repos/${{ github.repository }}/pages/builds" || true

@@ -27,13 +27,26 @@ The list appears on your Discover page as **UK Comedy & Game Shows**. Use the ge
 | Stand-up | 7 | Stand-up showcases and live comedy. |
 | Specials | 1 | One-off formats like the Big Fat Quiz. |
 | Classic | 11 | The older shows, in one place. |
-| New | | Recent UK shows found automatically, waiting for review. |
 
 A show can appear under more than one genre.
 
 ## How it stays current
 
-New episodes of every listed show appear in Stremio on their own. Once a week, new UK panel, quiz, game and chat shows are found automatically and added to **New**. Approved ones move into the main list. The picks are UK only, with no US or Irish versions. Changes go live within about ten minutes.
+New episodes of every listed show appear in Stremio on their own. Every Monday, a GitHub Action looks for new UK panel, quiz, game and chat shows, adds them to the right genre and publishes the update. Nothing needs doing by hand. Changes go live within about ten minutes.
+
+Only UK shows are added, and reality, drama, animation and kids' shows are filtered out.
+
+## Remove a show
+
+If something slips in that doesn't belong:
+
+1. Open [`blocklist.json`](blocklist.json) on GitHub and click the pencil icon.
+2. Add the show's IMDb ID (the `tt...` number from its IMDb page) inside the brackets, like `["tt1234567"]`. Separate several with commas.
+3. Click Commit changes. The next weekly run removes it, or run it now from the Actions tab with Run workflow.
+
+## If the weekly job fails
+
+GitHub emails the repo owner. The usual cause is the TMDB token: create a new one at themoviedb.org (Settings > API) and save it under Settings > Secrets and variables > Actions as `TMDB_API_KEY`. The list keeps working in the meantime, and it just stops adding new shows.
 
 ## Support
 
