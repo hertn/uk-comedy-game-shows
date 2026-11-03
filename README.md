@@ -36,18 +36,71 @@ New episodes of every listed show appear in Stremio on their own. Every Monday, 
 
 Only UK shows are added, and reality, drama, animation and kids' shows are filtered out.
 
-## Remove a show
-
-If something slips in that doesn't belong:
-
-1. Open [`blocklist.json`](blocklist.json) on GitHub and click the pencil icon.
-2. Add the show's IMDb ID (the `tt...` number from its IMDb page) inside the brackets, like `["tt1234567"]`. Separate several with commas.
-3. Click Commit changes. The next weekly run removes it, or run it now from the Actions tab with Run workflow.
-
-## If the weekly job fails
-
-GitHub emails the repo owner. The usual cause is the TMDB token: create a new one at themoviedb.org (Settings > API) and save it under Settings > Secrets and variables > Actions as `TMDB_API_KEY`. The list keeps working in the meantime, and it just stops adding new shows.
-
 ## Support
 
 This is free, with no ads or subscriptions. If you enjoy it, you can [buy me a coffee on Ko-fi](https://ko-fi.com/hertn).
+
+## Maintenance
+
+Reference for whoever looks after this, which will probably be you in a few months with everything forgotten. Nothing here needs doing in normal use.
+
+### How it works
+
+It's a Stremio addon made of plain files on GitHub Pages, with no server. Stremio reads `manifest.json`, then the catalog files under `catalog/series/`. Every file in this repo is either data or a small Python script, and there's nothing to install or host.
+
+| File | What it is |
+| --- | --- |
+| `shows.json` | The list: each show's IMDb ID and its genres. This is the source of truth. |
+| `blocklist.json` | IMDb IDs that must never appear. Wins over everything else. |
+| `tools/discover.py` | Finds new UK shows on TMDB and appends them to `shows.json`. |
+| `tools/build.py` | Reads `shows.json`, fetches names, years and ratings from Cinemeta, and writes `manifest.json` and `catalog/`. |
+| `.github/workflows/update.yml` | Runs both scripts every Monday at 07:00 UTC, commits, and publishes. |
+| `last-run.txt` | Written by every run so GitHub never pauses the schedule for inactivity. |
+| `.github/FUNDING.yml` | The Ko-fi Sponsor button. |
+
+Never edit anything under `catalog/` or `manifest.json` by hand, because the next run overwrites it.
+
+### Remove a show
+
+1. Open `blocklist.json` on GitHub and click the pencil icon.
+2. Add the show's IMDb ID (the `tt...` number in its IMDb URL) inside the brackets, like `["tt1234567"]`. Separate several with commas.
+3. Commit changes. The next weekly run removes it, or go to the Actions tab, choose Find new shows, and click Run workflow to do it now.
+
+### Add a show by hand
+
+Add `{"id": "tt1234567", "genres": ["Panel"]}` to `shows.json`, then run the workflow from the Actions tab. Genres are `Panel`, `Quiz & Game Shows`, `Challenge`, `Chat & Entertainment`, `Stand-up`, `Specials` and `Classic`, and a show can have several. The show must exist in Cinemeta as a series, or it can't appear in Stremio. Check by opening `https://v3-cinemeta.strem.io/meta/series/<id>.json`. Use the UK entry, because US, Australian and other versions have their own IDs and Cinemeta lists them separately.
+
+### Rules for what belongs
+
+- UK shows only. No US, Irish or other versions.
+- Comedy panel, game, quiz, chat and stand-up shows, plus Taskmaster-style comedy games. Quiz shows don't need comedians.
+- No scripted comedy and no reality TV.
+- One-off specials such as the Big Fat Quiz are allowed.
+
+### How new shows are found
+
+Each Monday `discover.py` asks TMDB for UK series from the last 180 days that carry the keywords game show, panel show, quiz show, talk show or stand-up comedy. It excludes the genres reality, animation, soap, drama, sci-fi, crime and kids. Each candidate must also exist in Cinemeta with a UK country tag. A game or quiz show that is also tagged Comedy goes to Challenge, other game and quiz shows to Quiz & Game Shows, panel shows to Panel, talk shows to Chat & Entertainment, and anything else to Panel. Occasionally a show that doesn't belong gets through, so use the blocklist.
+
+### If the weekly job fails
+
+GitHub emails the repo owner. Check the Actions tab for the failed run and open its log.
+
+- **"TMDB_API_KEY is not set" or an HTTP 401 error.** The token is missing or no longer valid. Create a new one at themoviedb.org (Settings, then API, and copy the API Read Access Token, the long one starting with `eyJ`). Save it at Settings, then Secrets and variables, then Actions, and edit `TMDB_API_KEY`. From a terminal with the GitHub CLI you can instead copy the token and run `pbpaste | gh secret set TMDB_API_KEY -R hertn/uk-comedy-game-shows`.
+- **Cinemeta errors.** These are usually temporary. `build.py` keeps the previous entry for any show it can't fetch, so the list is not affected. Re-run the workflow later.
+- **The schedule stopped.** GitHub pauses scheduled jobs after 60 days without repo activity. The weekly `last-run.txt` commit prevents this, but if it ever happens, open the Actions tab and re-enable the workflow.
+
+While the job is failing, the list keeps working. It just stops picking up new shows.
+
+### Changing genres or the name
+
+Stremio caches the genre list and name from `manifest.json`. After changing the `GENRES` list, `NAME` or `CAT_ID` in `tools/build.py`, raise the `version` in `manifest.json` (for example 1.2.0 to 1.3.0) and remove and re-add the addon in Stremio. Changing which shows are in the list needs neither, because Stremio refreshes the catalogs on its own within about ten minutes.
+
+### Run it on your own computer
+
+You need Python 3 and curl. `python3 tools/build.py` rebuilds the catalog. `TMDB_API_KEY=<token> python3 tools/discover.py` runs the discovery step and edits `shows.json`.
+
+### Things the automation can't do
+
+- It only finds shows that started in the last 180 days and that TMDB has tagged with the keywords above. Older shows that are missing, or new ones TMDB tagged differently, have to be added by hand.
+- Cinemeta is the only source of what Stremio shows, so a show it doesn't list can't be added. Some shows only have a single entry covering all their editions. The Big Fat Quiz, for example, is just one entry, and as of November 2026 there is no UK Blockbusters or UK The Floor entry.
+- If TMDB changes how it tags shows, or ends its free API, `discover.py` will need rewriting. The existing list keeps working either way.
