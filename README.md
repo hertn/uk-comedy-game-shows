@@ -27,12 +27,13 @@ The list appears on your Discover page as **UK Comedy & Game Shows**. Use the ge
 | Stand-up | 7 | Stand-up showcases and live comedy. |
 | Specials | 1 | One-off formats like the Big Fat Quiz. |
 | Classic | 11 | The older shows, in one place. |
+| New | | Recent UK shows found automatically, waiting for review. |
 
 A show can appear under more than one genre.
 
 ## How it stays current
 
-New episodes of every listed show appear in Stremio on their own. The list itself is hand-picked: UK shows only, with no US or Irish versions. Changes go live within about ten minutes of being published.
+New episodes of every listed show appear in Stremio on their own. Once a week, new UK panel, quiz, game and chat shows are found automatically and added to **New**. Approved ones move into the main list. The picks are UK only, with no US or Irish versions. Changes go live within about ten minutes.
 
 ## Support
 

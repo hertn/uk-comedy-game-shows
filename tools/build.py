@@ -3,7 +3,7 @@
 import json, os, subprocess, time
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-GENRES = ["Panel", "Quiz & Game Shows", "Challenge", "Chat & Entertainment", "Stand-up", "Specials", "Classic"]
+GENRES = ["Panel", "Quiz & Game Shows", "Challenge", "Chat & Entertainment", "Stand-up", "Specials", "Classic", "New"]
 CAT_ID = "ukcomedy"
 NAME = "UK Comedy & Game Shows"
 
@@ -20,6 +20,14 @@ def meta(i):
 def main():
     shows = json.load(open(os.path.join(ROOT, "shows.json")))
     metas = []
+    pending = []
+    for s in json.load(open(os.path.join(ROOT, "new.json"))):
+        m = meta(s["id"])
+        e = {"id": s["id"], "type": "series", "name": m["name"], "releaseInfo": m.get("releaseInfo", ""),
+             "poster": f"https://images.metahub.space/poster/medium/{s['id']}/img"}
+        if m.get("imdbRating"):
+            e["imdbRating"] = m["imdbRating"]
+        pending.append(e)
     for s in shows:
         m = meta(s["id"])
         e = {"id": s["id"], "type": "series", "name": m["name"],
@@ -36,7 +44,8 @@ def main():
             json.dump({"metas": items}, f)
     dump(os.path.join(base, CAT_ID + ".json"), [m for m, _ in metas])
     for g in GENRES:
-        dump(os.path.join(base, CAT_ID, f"genre={g}.json"), [m for m, gs in metas if g in gs])
+        items = pending if g == "New" else [m for m, gs in metas if g in gs]
+        dump(os.path.join(base, CAT_ID, f"genre={g}.json"), items)
     manifest = {
         "id": "io.github.ukcomedygameshows", "version": json.load(open(os.path.join(ROOT, "manifest.json")))["version"] if os.path.exists(os.path.join(ROOT, "manifest.json")) else "1.0.0",
         "name": NAME,

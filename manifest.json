@@ -1,6 +1,6 @@
 {
  "id": "io.github.ukcomedygameshows",
- "version": "1.0.0",
+ "version": "1.1.0",
  "name": "UK Comedy & Game Shows",
  "description": "Every UK comedy panel show, game show, quiz, chat show and stand-up showcase. No scripted shows, no reality.",
  "resources": [
@@ -27,7 +27,8 @@
       "Chat & Entertainment",
       "Stand-up",
       "Specials",
-      "Classic"
+      "Classic",
+      "New"
      ],
      "isRequired": false
     }
@@ -39,7 +40,8 @@
     "Chat & Entertainment",
     "Stand-up",
     "Specials",
-    "Classic"
+    "Classic",
+    "New"
    ],
    "extraSupported": [
     "genre"
