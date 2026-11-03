@@ -4,7 +4,7 @@
 Shows whose metadata can't be fetched keep their previous catalog entry,
 so a Cinemeta hiccup never drops a show from the list.
 """
-import json, os, subprocess, time
+import json, os, re, subprocess, time
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 GENRES = ["Panel", "Quiz & Game Shows", "Challenge", "Chat & Entertainment", "Stand-up", "Specials", "Classic"]
@@ -48,7 +48,11 @@ def main():
             print("skipping (no metadata yet):", s["id"])
             continue
         entries.append((e, s["genres"]))
-    entries.sort(key=lambda x: -float(x[0].get("imdbRating") or 0))
+    # Newest first by start year, then highest rated.
+    def order(x):
+        y = re.search(r"\d{4}", x[0].get("releaseInfo") or "")
+        return (-(int(y.group()) if y else 0), -float(x[0].get("imdbRating") or 0))
+    entries.sort(key=order)
     os.makedirs(os.path.join(CATALOG, CAT_ID), exist_ok=True)
     def dump(path, items):
         with open(path, "w") as f:

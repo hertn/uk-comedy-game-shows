@@ -58,6 +58,8 @@ It's a Stremio addon made of plain files on GitHub Pages, with no server. Stremi
 | `last-run.txt` | Written by every run so GitHub never pauses the schedule for inactivity. |
 | `.github/FUNDING.yml` | The Ko-fi Sponsor button. |
 
+The list is shown newest first, by the year each show started, with ties broken by IMDb rating. Change the sort in `tools/build.py` (the `order` function) if you want something else.
+
 Never edit anything under `catalog/` or `manifest.json` by hand, because the next run overwrites it.
 
 ### Remove a show
