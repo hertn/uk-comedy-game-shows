@@ -63,7 +63,19 @@ def preview_reality():
         print(" | ".join(r))
     print(len(rows), "reality shows")
 
+def probe(names):
+    """Print TMDB genres and keywords for named shows. Changes nothing."""
+    for n in names:
+        res = [r for r in tmdb("/search/tv", query=n).get("results", []) if "GB" in r.get("origin_country", [])][:2]
+        if not res:
+            print(f"PROBE | {n} | not found as GB")
+        for t in res:
+            kw = sorted(k["name"] for k in tmdb(f"/tv/{t['id']}/keywords").get("results", []))
+            print(f"PROBE | {n} -> {t['name']} | {t.get('first_air_date','')[:4]} | genres {t.get('genre_ids')} | {', '.join(kw)}")
+
 def main():
+    if os.environ.get("PROBE"):
+        return probe([x.strip() for x in os.environ["PROBE"].split(";") if x.strip()])
     if "--preview-reality" in sys.argv:
         if not TOKEN:
             sys.exit("TMDB_API_KEY is not set")
