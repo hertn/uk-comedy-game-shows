@@ -57,10 +57,11 @@ It's a Stremio addon made of plain files on GitHub Pages, with no server. Stremi
 | `tools/discover.py` | Finds new UK shows on TMDB and appends them to `shows.json`. |
 | `tools/build.py` | Reads `shows.json`, fetches names, years and ratings from Cinemeta, and writes `manifest.json` and `catalog/`. |
 | `.github/workflows/update.yml` | Runs both scripts every Monday at 07:00 UTC, commits, and publishes. |
+| `latest.json` | Cached date of each show's latest aired episode, used for the sort order. Rewritten by the build. |
 | `last-run.txt` | Written by every run so GitHub never pauses the schedule for inactivity. |
 | `.github/FUNDING.yml` | The Ko-fi Sponsor button. |
 
-The list is shown newest first, by the year each show started, with ties broken by IMDb rating. Change the sort in `tools/build.py` (the `order` function) if you want something else.
+The list is shown with the most recently aired shows first, using the date of each show's latest aired episode from Cinemeta (capped at the end year for shows that have finished). Ties are broken by IMDb rating. The dates are cached in `latest.json`. Change the sort in `tools/build.py` (the `order` function) if you want something else.
 
 Never edit anything under `catalog/` or `manifest.json` by hand, because the next run overwrites it. The same goes for the show count at the top of this README and the genre table, which the build rewrites between the `<!-- total -->` and `<!-- genres -->` markers. Keep those markers if you edit the README.
 
