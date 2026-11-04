@@ -27,7 +27,8 @@
       "Chat & Entertainment",
       "Stand-up",
       "Specials",
-      "Classic"
+      "Classic",
+      "Celebrity"
      ],
      "isRequired": false
     }
@@ -39,7 +40,8 @@
     "Chat & Entertainment",
     "Stand-up",
     "Specials",
-    "Classic"
+    "Classic",
+    "Celebrity"
    ],
    "extraSupported": [
     "genre"
