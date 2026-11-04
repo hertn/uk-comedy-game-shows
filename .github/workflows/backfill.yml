@@ -1,0 +1,39 @@
+name: Backfill (one-off)
+
+on:
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Dry run: print what would be added, change nothing"
+        required: true
+        default: "true"
+
+permissions:
+  contents: write
+  pages: write
+
+jobs:
+  backfill:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v5
+      - name: Find shows from every year
+        env:
+          TMDB_API_KEY: ${{ secrets.TMDB_API_KEY }}
+          BACKFILL: "1"
+          DRY_RUN: ${{ inputs.dry_run == 'true' && '1' || '0' }}
+        run: python3 tools/discover.py
+      - name: Rebuild and publish
+        if: ${{ inputs.dry_run != 'true' }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python3 tools/build.py
+          date -u +%F > last-run.txt
+          git config user.name hertn
+          git config user.email 20706648+hertn@users.noreply.github.com
+          git add -A
+          git commit -m "Backfill older shows" || exit 0
+          git push
+          gh api -X POST "repos/${{ github.repository }}/pages/builds" || true
