@@ -37,7 +37,7 @@ A show can appear under more than one genre.
 
 New episodes of every listed show appear in Stremio on their own. Every Monday, a GitHub Action looks for new UK panel, quiz, game and chat shows, adds them to the right genre and publishes the update. Nothing needs doing by hand. Changes go live within about ten minutes.
 
-Only UK shows are added, and reality, drama, animation and kids' shows are filtered out.
+Only UK shows are added. Reality TV is left out, except celebrity competitions (see Rules below). Drama, animation and kids' shows are filtered out.
 
 ## Support
 
@@ -80,12 +80,22 @@ Add `{"id": "tt1234567", "genres": ["Panel"]}` to `shows.json`, then run the wor
 
 - UK shows only. No US, Irish or other versions.
 - Comedy panel, game, quiz, chat and stand-up shows, plus Taskmaster-style comedy games. Quiz shows don't need comedians.
-- No scripted comedy and no reality TV.
+- No scripted comedy.
+- No reality TV, with one exception: celebrity competitions that have a prize or a winner (I'm a Celebrity, Celebrity Big Brother, The Masked Singer, Strictly, and so on). They go in the Celebrity genre. Regular Big Brother, Love Island, The Traitors, Bake Off and MasterChef stay out.
 - One-off specials such as the Big Fat Quiz are allowed.
 
 ### How new shows are found
 
-Each Monday `discover.py` asks TMDB for UK series from the last 180 days that carry the keywords game show, panel show, quiz show, talk show or stand-up comedy. It excludes the genres reality, animation, soap, drama, sci-fi, crime and kids. Each candidate must also exist in Cinemeta with a UK country tag. A game or quiz show that is also tagged Comedy goes to Challenge, other game and quiz shows to Quiz & Game Shows, panel shows to Panel, talk shows to Chat & Entertainment, and anything else to Panel. Occasionally a show that doesn't belong gets through, so use the blocklist.
+Each Monday `discover.py` makes two searches on TMDB, both limited to UK series from the last 180 days.
+
+1. **Comedy and game shows.** Series tagged game show, panel show, quiz show, talk show or stand-up comedy, excluding the genres reality, animation, soap, drama, sci-fi, crime and kids. A game or quiz show that is also tagged Comedy goes to Challenge, other game and quiz shows to Quiz & Game Shows, panel shows to Panel, talk shows to Chat & Entertainment, and anything else to Panel.
+2. **Celebrity competitions.** Reality series are only let in if the title contains "Celeb" or a celebrity franchise name (Masked, Strictly, Dancing on Ice), or if TMDB tags them "celebrity" and also a competition. A title with "Celeb" needs a competition tag or a subtitle, so companion shows such as "The Celebrity Traitors: Uncloaked" get in and lifestyle shows such as "Celebrity Escape to the Country" don't. These go to the Celebrity genre. To add another franchise, add its name to `CELEB_FRANCHISES` in `tools/discover.py`.
+
+Every candidate must also exist in Cinemeta with a UK country tag. There's no data source that tells a celebrity reality show from a regular one, so the rule goes by name. A future celebrity show with an unrelated title and no "celebrity" tag would be missed. Occasionally something that doesn't belong gets through, so use the blocklist.
+
+### Catch up on older shows
+
+The weekly job only looks back 180 days. To scan every year (done once, on 2026-11-04), go to the Actions tab, choose Backfill (one-off), and click Run workflow. Leave "Dry run" as `true` to print what would be added without changing anything, or set it to `false` to add the shows and publish. Shows with fewer than 3 votes on TMDB are skipped.
 
 ### If the weekly job fails
 
