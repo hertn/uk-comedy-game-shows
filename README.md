@@ -74,7 +74,7 @@ Never edit anything under `catalog/` or `manifest.json` by hand, because the nex
 
 ### Add a show by hand
 
-Add `{"id": "tt1234567", "genres": ["Panel"]}` to `shows.json`, then run the workflow from the Actions tab. Genres are `Panel`, `Quiz & Game Shows`, `Challenge`, `Chat & Entertainment`, `Stand-up`, `Specials` and `Classic`, and a show can have several. The show must exist in Cinemeta as a series, or it can't appear in Stremio. Check by opening `https://v3-cinemeta.strem.io/meta/series/<id>.json`. Use the UK entry, because US, Australian and other versions have their own IDs and Cinemeta lists them separately.
+Add `{"id": "tt1234567", "genres": ["Panel"]}` to `shows.json`, then run the workflow from the Actions tab. Genres are `Panel`, `Quiz & Game Shows`, `Challenge`, `Chat & Entertainment`, `Stand-up`, `Specials`, `Classic` and `Celebrity`, and a show can have several. The show must exist in Cinemeta as a series, or it can't appear in Stremio. Check by opening `https://v3-cinemeta.strem.io/meta/series/<id>.json`. Use the UK entry, because US, Australian and other versions have their own IDs and Cinemeta lists them separately.
 
 ### Rules for what belongs
 
@@ -117,6 +117,6 @@ You need Python 3 and curl. `python3 tools/build.py` rebuilds the catalog. `TMDB
 
 ### Things the automation can't do
 
-- It only finds shows that started in the last 180 days and that TMDB has tagged with the keywords above. Older shows that are missing, or new ones TMDB tagged differently, have to be added by hand.
+- Each week it only looks at shows that started in the last 180 days, and only finds those TMDB has tagged with the keywords above. Older shows are covered by the one-off backfill, and anything TMDB tagged differently has to be added by hand. Splash! and Celebrity Gogglebox, for example, are not tagged as competitions and so are missing.
 - Cinemeta is the only source of what Stremio shows, so a show it doesn't list can't be added. Some shows only have a single entry covering all their editions. The Big Fat Quiz, for example, is just one entry, and as of November 2026 there is no UK Blockbusters or UK The Floor entry.
 - If TMDB changes how it tags shows, or ends its free API, `discover.py` will need rewriting. The existing list keeps working either way.
