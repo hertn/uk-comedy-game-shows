@@ -11,6 +11,26 @@ GENRES = ["Panel", "Quiz & Game Shows", "Challenge", "Chat & Entertainment", "St
 CAT_ID = "ukcomedy"
 NAME = "UK Comedy & Game Shows"
 CATALOG = os.path.join(ROOT, "catalog", "series")
+BLURBS = {
+    "Panel": "Comedians trading jokes about the news and each other.",
+    "Quiz & Game Shows": "The Chase, Millionaire, QI, Only Connect and the rest.",
+    "Challenge": "Taskmaster, Last One Laughing, Battle in the Box and other comedy games.",
+    "Chat & Entertainment": "Chat shows and light entertainment fronted by comedians.",
+    "Stand-up": "Stand-up showcases and live comedy.",
+    "Specials": "One-off formats like the Big Fat Quiz.",
+    "Classic": "The older shows, in one place.",
+}
+
+def update_readme(entries):
+    """Keep the show counts in README.md in step with the catalog."""
+    path = os.path.join(ROOT, "README.md")
+    text = open(path).read()
+    rows = ["| Genre | Shows | |", "| --- | ---: | --- |"]
+    for g in GENRES:
+        rows.append(f"| {g} | {sum(1 for _, gs in entries if g in gs)} | {BLURBS[g]} |")
+    text = re.sub(r"<!-- total -->.*?<!-- /total -->", f"<!-- total -->{len(entries)}<!-- /total -->", text)
+    text = re.sub(r"<!-- genres -->.*?<!-- /genres -->", lambda _: "<!-- genres -->\n" + "\n".join(rows) + "\n<!-- /genres -->", text, flags=re.S)
+    open(path, "w").write(text)
 
 def meta(i):
     u = f"https://v3-cinemeta.strem.io/meta/series/{i}.json"
@@ -71,6 +91,7 @@ def main():
                       "genres": GENRES, "extraSupported": ["genre"]}],
     }
     json.dump(manifest, open(mpath, "w"), indent=1)
+    update_readme(entries)
     print(len(entries), "shows")
 
 if __name__ == "__main__":

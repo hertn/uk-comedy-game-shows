@@ -1,6 +1,6 @@
 <h1 align="center">UK Comedy &amp; Game Shows</h1>
 
-<p align="center">Every UK comedy panel show, game show, quiz, chat show and stand-up showcase, in one Stremio list.<br>88 shows. No scripted comedy, no reality TV.</p>
+<p align="center">Every UK comedy panel show, game show, quiz, chat show and stand-up showcase, in one Stremio list.<br><!-- total -->89<!-- /total --> shows. No scripted comedy, no reality TV.</p>
 
 <p align="center"><a href="https://ko-fi.com/hertn"><img src="https://img.shields.io/badge/support-%E2%9D%A4%20Ko--fi-ff5e5b?style=flat&amp;labelColor=15181e&amp;logo=kofi&amp;logoColor=white" alt="Support on Ko-fi"></a></p>
 
@@ -18,15 +18,17 @@ The list appears on your Discover page as **UK Comedy & Game Shows**. Use the ge
 
 ## What's in it
 
+<!-- genres -->
 | Genre | Shows | |
 | --- | ---: | --- |
-| Panel | 21 | Comedians trading jokes about the news and each other. |
+| Panel | 22 | Comedians trading jokes about the news and each other. |
 | Quiz & Game Shows | 26 | The Chase, Millionaire, QI, Only Connect and the rest. |
 | Challenge | 13 | Taskmaster, Last One Laughing, Battle in the Box and other comedy games. |
 | Chat & Entertainment | 20 | Chat shows and light entertainment fronted by comedians. |
 | Stand-up | 7 | Stand-up showcases and live comedy. |
 | Specials | 1 | One-off formats like the Big Fat Quiz. |
 | Classic | 11 | The older shows, in one place. |
+<!-- /genres -->
 
 A show can appear under more than one genre.
 
@@ -60,7 +62,7 @@ It's a Stremio addon made of plain files on GitHub Pages, with no server. Stremi
 
 The list is shown newest first, by the year each show started, with ties broken by IMDb rating. Change the sort in `tools/build.py` (the `order` function) if you want something else.
 
-Never edit anything under `catalog/` or `manifest.json` by hand, because the next run overwrites it.
+Never edit anything under `catalog/` or `manifest.json` by hand, because the next run overwrites it. The same goes for the show count at the top of this README and the genre table, which the build rewrites between the `<!-- total -->` and `<!-- genres -->` markers. Keep those markers if you edit the README.
 
 ### Remove a show
 
