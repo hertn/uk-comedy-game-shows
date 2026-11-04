@@ -45,7 +45,29 @@ def pick_genre(kw, gids):
         return "Stand-up"
     return "Panel"
 
+def preview_reality():
+    """Print recent UK reality shows with the signals a 'celebrity only' rule could use. Changes nothing."""
+    for k in ["celebrity", "celebrities", "famous", "celebrity reality show", "reality competition"]:
+        res = [r for r in tmdb("/search/keyword", query=k).get("results", []) if r["name"].lower() == k]
+        print(f"keyword '{k}':", res[0]["id"] if res else "not found")
+    rows = []
+    for page in range(1, 8):
+        d = tmdb("/discover/tv", with_origin_country="GB", with_genres="10764", **{"first_air_date.gte": "2022-01-01"}, sort_by="popularity.desc", page=page)
+        for t in d.get("results", []):
+            kw = sorted(k["name"] for k in tmdb(f"/tv/{t['id']}/keywords").get("results", []))
+            title = t["name"].lower()
+            rows.append((("CELEB-TITLE" if "celeb" in title else "-"), t["name"], t.get("first_air_date", "")[:4], ", ".join(kw)))
+        if page >= d.get("total_pages", 1):
+            break
+    for r in rows:
+        print(" | ".join(r))
+    print(len(rows), "reality shows")
+
 def main():
+    if "--preview-reality" in sys.argv:
+        if not TOKEN:
+            sys.exit("TMDB_API_KEY is not set")
+        return preview_reality()
     if not TOKEN:
         sys.exit("TMDB_API_KEY is not set")
     shows = read("shows.json")
