@@ -26,7 +26,7 @@ KEYWORDS = ["game show", "panel show", "quiz show", "talk show", "stand-up comed
 NOT_COMEDY = "10764,16,10766,18,10765,80,10762"  # reality, animation, soap, drama, sci-fi, crime, kids
 REALITY = "10764"
 LOOKBACK_DAYS = 180
-MIN_VOTES = 20 if BACKFILL else 0          # old shows must have some audience
+MIN_VOTES = 3 if BACKFILL else 0          # old shows must have some audience
 COMEDY, TALK = 35, 10767
 
 # Reality shows are only allowed in when they look like celebrity competitions.
