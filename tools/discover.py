@@ -63,6 +63,22 @@ def preview_reality():
         print(" | ".join(r))
     print(len(rows), "reality shows")
 
+def fame(tv_id, top=12):
+    """How famous is a show's cast? Returns (people checked, median other-credit count, how many have 20+ credits, top names)."""
+    cast = tmdb(f"/tv/{tv_id}/aggregate_credits").get("cast", [])
+    cast = sorted(cast, key=lambda c: -c.get("total_episode_count", 0))[:top]
+    rows = []
+    for c in cast:
+        try:
+            p = tmdb(f"/person/{c['id']}", append_to_response="combined_credits")
+            rows.append((len(p.get("combined_credits", {}).get("cast", [])), p.get("popularity", 0), p["name"]))
+        except Exception:
+            pass
+    if not rows:
+        return (0, 0, 0, [])
+    counts = sorted(r[0] for r in rows)
+    return (len(rows), counts[len(counts) // 2], sum(1 for r in rows if r[0] >= 20), [f"{r[2]}({r[0]})" for r in rows[:5]])
+
 def probe(names):
     """Print TMDB genres and keywords for named shows. Changes nothing."""
     for n in names:
@@ -71,7 +87,8 @@ def probe(names):
             print(f"PROBE | {n} | not found as GB")
         for t in res:
             kw = sorted(k["name"] for k in tmdb(f"/tv/{t['id']}/keywords").get("results", []))
-            print(f"PROBE | {n} -> {t['name']} | {t.get('first_air_date','')[:4]} | genres {t.get('genre_ids')} | {', '.join(kw)}")
+            f = fame(t["id"])
+            print(f"PROBE | {n} -> {t['name']} | {t.get('first_air_date','')[:4]} | cast {f[0]}, median credits {f[1]}, 20+ credits: {f[2]} | {', '.join(f[3])}")
 
 def main():
     if os.environ.get("PROBE"):
