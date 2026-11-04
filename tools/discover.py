@@ -120,15 +120,21 @@ def main():
             kw = {k["name"].lower() for k in tmdb(f"/tv/{t['id']}/keywords").get("results", [])}
             if stream == "celebrity":
                 if not celebrity_ok(t["name"], kw):
+                    if os.environ.get("VERBOSE") and any(w in t["name"].lower() for w in ("celeb", "mask", "strict", "dancing", "hunted", "sas", "splash", "bake", "masterchef", "gogglebox")):
+                        print(f"REJECT title/tags | {t['name']} | {t.get('first_air_date','')[:4]} | tags {sorted(kw)}")
                     continue
                 genre = "Celebrity"
             else:
                 genre = comedy_genre(kw, t.get("genre_ids", []))
             imdb = tmdb(f"/tv/{t['id']}/external_ids").get("imdb_id")
             if not imdb or imdb in known:
+                if os.environ.get("VERBOSE") and stream == "celebrity":
+                    print(f"REJECT {'no imdb id' if not imdb else 'already known'} | {t['name']} | {t.get('first_air_date','')[:4]}")
                 continue
             m = cinemeta_uk(imdb)
             if not m:
+                if os.environ.get("VERBOSE"):
+                    print(f"REJECT not UK in Cinemeta | {t['name']} | {imdb}")
                 continue
             print(f"{'WOULD ADD' if DRY_RUN else 'ADD'} | {genre} | {m['name']} | {m.get('releaseInfo','')} | {imdb} | votes {t.get('vote_count')}")
             added.append({"id": imdb, "genres": [genre]})
