@@ -7,7 +7,7 @@ so a Cinemeta hiccup never drops a show from the list.
 import json, os, re, subprocess, time
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-GENRES = ["Panel", "Quiz & Game Shows", "Challenge", "Chat & Entertainment", "Stand-up", "Specials", "Classic"]
+GENRES = ["Panel", "Quiz & Game Shows", "Challenge", "Chat & Entertainment", "Stand-up", "Specials", "Classic", "Celebrity"]
 CAT_ID = "ukcomedy"
 NAME = "UK Comedy & Game Shows"
 CATALOG = os.path.join(ROOT, "catalog", "series")
@@ -19,6 +19,7 @@ BLURBS = {
     "Stand-up": "Stand-up showcases and live comedy.",
     "Specials": "One-off formats like the Big Fat Quiz.",
     "Classic": "The older shows, in one place.",
+    "Celebrity": "Celebrity reality competitions, from I'm a Celebrity to The Masked Singer.",
 }
 
 def update_readme(entries):
