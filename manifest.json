@@ -1,8 +1,9 @@
 {
  "id": "io.github.ukcomedygameshows",
- "version": "1.3.0",
+ "version": "1.3.1",
  "name": "UK Comedy & Game Shows",
  "description": "Every UK comedy panel show, game show, quiz, chat show and stand-up showcase. No scripted shows, no reality.",
+ "logo": "https://hertn.github.io/uk-comedy-game-shows/icon.svg",
  "resources": [
   "catalog"
  ],
