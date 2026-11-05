@@ -118,6 +118,7 @@ def main():
     manifest = {
         "id": "io.github.ukcomedygameshows", "version": version, "name": NAME,
         "description": "Every UK comedy panel show, game show, quiz, chat show and stand-up showcase. No scripted shows, no reality.",
+        "logo": "https://hertn.github.io/uk-comedy-game-shows/icon.svg",
         "resources": ["catalog"], "types": ["series"], "idPrefixes": ["tt"],
         "catalogs": [{"type": "series", "id": CAT_ID, "name": NAME,
                       "extra": [{"name": "genre", "options": live_genres, "isRequired": False}],

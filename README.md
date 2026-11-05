@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="icon.svg" width="88" height="88" alt="UK Comedy & Game Shows icon">
+</p>
+
 <h1 align="center">UK Comedy &amp; Game Shows</h1>
 
 <p align="center">Every UK comedy panel show, game show, quiz, chat show and stand-up showcase, in one Stremio list.<br><!-- total -->158<!-- /total --> shows. No scripted comedy, no reality TV.</p>
