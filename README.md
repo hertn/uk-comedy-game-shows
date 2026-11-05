@@ -6,7 +6,10 @@
 
 <p align="center">Every UK comedy panel show, game show, quiz, chat show and stand-up showcase, in one Stremio list.<br><!-- total -->158<!-- /total --> shows. No scripted comedy, no reality TV.</p>
 
-<p align="center"><a href="https://ko-fi.com/hertn"><img src="https://img.shields.io/badge/support-%E2%9D%A4%20Ko--fi-ff5e5b?style=flat&amp;labelColor=15181e&amp;logo=kofi&amp;logoColor=white" alt="Support on Ko-fi"></a></p>
+<p align="center">
+  <a href="https://web.stremio.com/#/addons?addon=https%3A%2F%2Fhertn.github.io%2Fuk-comedy-game-shows%2Fmanifest.json"><img src="https://img.shields.io/badge/install-in%20Stremio-7b5cf0?style=flat&amp;labelColor=15181e" alt="Install in Stremio"></a>
+  <a href="https://ko-fi.com/hertn"><img src="https://img.shields.io/badge/support-%E2%9D%A4%20Ko--fi-ff5e5b?style=flat&amp;labelColor=15181e&amp;logo=kofi&amp;logoColor=white" alt="Support on Ko-fi"></a>
+</p>
 
 ## Install
 
