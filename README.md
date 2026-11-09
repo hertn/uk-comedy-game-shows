@@ -4,7 +4,7 @@
 
 <h1 align="center">UK Comedy &amp; Game Shows</h1>
 
-<p align="center">Every UK comedy panel show, game show, quiz, chat show and stand-up showcase, in one Stremio list.<br><!-- total -->158<!-- /total --> shows. No scripted comedy, no reality TV.</p>
+<p align="center">Every UK comedy panel show, game show, quiz, chat show and stand-up showcase, in one Stremio list.<br><!-- total -->159<!-- /total --> shows. No scripted comedy, no reality TV.</p>
 
 <p align="center">
   <a href="https://web.stremio.com/#/addons?addon=https%3A%2F%2Fhertn.github.io%2Fuk-comedy-game-shows%2Fmanifest.json"><img src="https://img.shields.io/badge/install-in%20Stremio-7b5cf0?style=flat&amp;labelColor=15181e" alt="Install in Stremio"></a>
@@ -35,7 +35,7 @@ The list appears on your Discover page as **UK Comedy & Game Shows**. Use the ge
 | Stand-up | 15 | Stand-up showcases and live comedy. |
 | Specials | 1 | One-off formats like the Big Fat Quiz. |
 | Classic | 11 | The older shows, in one place. |
-| Celebrity | 17 | Celebrity reality competitions, from I'm a Celebrity to The Masked Singer. |
+| Celebrity | 18 | Celebrity reality competitions, from I'm a Celebrity to The Masked Singer. |
 <!-- /genres -->
 
 A show can appear under more than one genre.
